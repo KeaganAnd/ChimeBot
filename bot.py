@@ -5,10 +5,12 @@ import asyncio
 from dotenv import load_dotenv
 import os
 
+#loads config file
+load_dotenv(os.path.join(os.path.dirname(__file__),"Config.env"))
 
+botPrefix = os.getenv("BotPrefix")
 
-
-bot = commands.Bot(command_prefix=["R","r"], intents=discord.Intents.all())
+bot = commands.Bot(command_prefix=[botPrefix.upper(),botPrefix.lower()], intents=discord.Intents.all())
 bot.remove_command('help') #Removes default help command
 
 @bot.event
@@ -17,63 +19,50 @@ async def on_ready():
     checkVC.start()
 
 
+lastCheckMembers = []
 
 @tasks.loop(seconds=5)
 async def checkVC():
-    channel = bot.get_channel() #gets the channel you want to get the list from | Needs to take a channel ID
+    global lastCheckMembers
+    channel = bot.get_channel(int(os.getenv("MonitoredChannel"))) #gets the channel you want to get the list from | Needs to take a channel ID
 
-    members = channel.members #finds members connected to the channel
+    connectedMembers = channel.members #finds members connected to the channel
+    connectedMembersID = [member.id for member in connectedMembers]
 
-    inputFile = open("old.txt", "r")
-    readFile = inputFile.read()
-
-    oldMemIds = []
-
-    for id in readFile.split():
-        oldMemIds.append(id)
-
-    inputFile.close()
-
-
+    joinedMembers = []
+    leftMembers = []
     
-    outputFile = open("old.txt", "w")
 
-    memids = [] #(list)
-    for member in members:
-        outputFile.write(str(member.id)+" ")
-        memids.append(str(member.id))
 
-    outputFile.close()
+    for member in connectedMembersID:
+        if len(connectedMembersID) > 0:
+            if member not in lastCheckMembers:
+                joinedMembers.append(member)
+
+    for member in lastCheckMembers:
+        if len(lastCheckMembers) > 0:
+            if member not in connectedMembersID:
+                leftMembers.append(member)
 
 
     
 
-    joinedIds = []
-    leftIds = []
+    print(f"{joinedMembers} \\ {leftMembers}")
 
-    for id in memids:
-        if id not in oldMemIds:
-            joinedIds.append(id)
-            
-    for id in oldMemIds:
-        if id not in memids:
-            leftIds.append(id)
+    announceChannel = bot.get_channel(int(os.getenv("SendChannel")))
 
-    print(f"{joinedIds} \ {leftIds}")
+    if len(joinedMembers) > 0:
+        for id in joinedMembers:
+            await announceChannel.send(f"<@>, <@{id}> has joined the call")
 
-    announceChannel = bot.get_channel(819745574307889233)
+    if len(leftMembers) > 0:
+        for id in leftMembers:
+            await announceChannel.send(f"<@>, <@{id}> has left the call")
 
-    if joinedIds != []:
-        for id in joinedIds:
-            if (id != 345729747537494016) and (345729747537494016 not in memids):
-                await announceChannel.send(f"<@345729747537494016>, <@{id}> has joined the call")
+    joinedMembers.clear()
+    leftMembers.clear()
 
-    if leftIds != []:
-        for id in leftIds:
-            if (id != 345729747537494016) and (345729747537494016 not in memids):
-                await announceChannel.send(f"<@345729747537494016>, <@{id}> has left the call")
-
-
+    lastCheckMembers = connectedMembersID
 
     
 @bot.command()
@@ -81,7 +70,7 @@ async def ping(ctx):
     await ctx.channel.send("Pong!")
 
 
-# Load environment variables from a .env file
+#Loads bot token
 load_dotenv(os.path.join(os.path.dirname(__file__),"API_Token.env"))
 
 bot.run(os.getenv("API_TOKEN"))
