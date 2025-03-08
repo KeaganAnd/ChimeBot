@@ -1,3 +1,13 @@
+'''
+ChimeBot
+3/2025
+
+Created by RubSomeSaltInIt
+All rights reserved
+
+DO NOT RUN THIS PROGRAM UNTIL YOU HAVE READ 'README.md'
+'''
+
 import discord
 from discord.ext import commands, tasks
 import sys
@@ -66,7 +76,7 @@ try: #Open config and write settings to dict
     file.close()
 except FileNotFoundError: #If config file doesnt exit then create it and close program
     with open('Config.txt', 'w') as file:
-            file.write("#EDIT ME\nBotToken=YOURAPIKEY\n#------------\nMonitoredChannel=\n#This is the voice channel the bot will monitor\n\nSendChannel=\n#This is the text channel the bot will send notifications to\n\nBotPrefix=c\n#The prefix used for commands (dont really need to change this one)\n\n#This determines if a group gets @'d\nAtAGroup=False\n\n#What group gets @'d\nGroupToAt=@everyone\n\n#How often the bot checks the voice channel in seconds (Be careful how low this is set, it can affect performance)\nLoopTime=5\n\n#The server the bot works in\nServerID=") #This is a long string lol
+            file.write("#MUST READ 'README.md' BEFORE EDITING\n\n\n\n\n\n\n\n\n\n\n#EDIT ME\nBotToken=YOURAPIKEY\n#------------\nMonitoredChannel=\n#This is the voice channel the bot will monitor\n\nSendChannel=\n#This is the text channel the bot will send notifications to\n\nBotPrefix=c\n#The prefix used for commands (dont really need to change this one)\n\n#This determines if a group gets @'d\nAtAGroup=False\n\n#What group gets @'d\nGroupToAt=@everyone\n\n#How often the bot checks the voice channel in seconds (Be careful how low this is set, it can affect performance)\nLoopTime=5\n\n#The server the bot works in\nServerID=") #This is a long string lol
             file.close()
             print("Welcome new user! Please enter your Discord Bot API Key in \'Config.txt\'")
             sys.exit()

@@ -76,7 +76,7 @@ Chimebot tracks a voice channel within a discord server and send announcements t
         **Never share this token with anyone!**  
      4. Copy the token.  
      5. Go back to your bot folder and open the newly created `Config.txt`.  
-     6. In **line 2**, replace `"YOURAPIKEY"` with the key you just copied.  
+     6. In **line 13**, replace `"YOURAPIKEY"` with the key you just copied.  
 
 3. **Adding the bot to your server**
     - *Now* we just need to get your bot in your server.
