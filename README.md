@@ -19,7 +19,7 @@ By using this software, you agree to the following:
 3. **No Unauthorized Redistribution** – You may **NOT** reupload or distribute this project **unless** you have made **significant changes**, such as adding a feature or fixing a bug.  
 4. **No False Attribution** – You are **NOT** allowed to claim this source code as your own. Proper credit must be given to the original author.  
 5. **No Warranty** – This software is provided **as is**, without any guarantees or liability for damages or data loss. Use at your own risk.  
-6. **License Termination** – Any violation of these terms may result in the revocation of your rights to use, modify, or distribute ChimeBot.  
+6. **License Termination** – Any violation of these terms will result in the immediate revocation of your rights to use, modify, or distribute ChimeBot.  
 
 By using this software, you acknowledge that you have read and agreed to these terms.
 
@@ -77,3 +77,30 @@ Chimebot tracks a voice channel within a discord server and send announcements t
      4. Copy the token.  
      5. Go back to your bot folder and open the newly created `Config.txt`.  
      6. In **line 2**, replace `"YOURAPIKEY"` with the key you just copied.  
+
+3. **Adding the bot to your server**
+    - *Now* we just need to get your bot in your server.
+    - Go back to your developer portal and click the 'OAuth2' tab on the left.
+    - Look for 'CLIENT ID' and copy it.
+    - Copy the below link into your browser and replace "YOURCLIENTID" with the ID you just copied.
+    ```https://discord.com/oauth2/authorize?client_id=YOURCLIENTID=3072&integration_type=0&scope=bot+applications.commands```
+    - Go through the setup in Discord and add it to the server you want your bot in.
+
+4. **Final steps**
+    - Now go to the server you just added your bot to.
+    - Run the ```bot.py``` file again.
+    - Now in your server type 'csync'
+        *This makes it so the server can see the slash commands*
+    - Now we can use slash commands to finish setting up your bot.
+    - Use ```/setmonitorchannel``` to set the voice channel the bot will watch.
+    - Use ```/setsendchannel``` to set the text channel the bot will send messages to.
+    **Congrats! The bot will now work.**
+    If you have any issues please open an issue or contact me.
+
+5. **Optional Customization**
+    These options are some customization but are not required for the bot to function.
+
+    - ```/setalertedrole``
+        This command will set the role that is @'d when someone leaves or joins. This can be disabled or enabled with the command below
+    - ```atagroup```
+        This command will determine if a role is @'d when someone leaves or joins. Default is @everyone
