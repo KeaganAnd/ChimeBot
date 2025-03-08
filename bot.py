@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands, tasks
 from discord import app_commands
-from colorama import Fore, Style
 import os
 import sys
 
@@ -25,27 +24,27 @@ skipLoop = True
 
 #Settings dictionary
 settings = {}
+settingsLineNumber = {}
 
-try:
+try: #Open config and write settings to dict
 
     with open('Config.txt', 'r') as file:
         readFile = file.readlines()
         amountOfLines = len(readFile)
-        print(amountOfLines)
     
-    for line in readFile:
-        
+    for lineNumber,line in enumerate(readFile):
         if line[0] == '#' or line[0] == '\n':
             continue
         splitLine = line.split("=")
 
-        print(splitLine)
 
         if len(splitLine) != 1:
-            splitLine[1] = splitLine[1].strip("\\n")
+            splitLine[1] = splitLine[1].strip("\n")
+            
             settings[splitLine[0]] = (splitLine[1])
-
-except FileNotFoundError:
+            settingsLineNumber[splitLine[0]] = lineNumber+1
+    file.close()
+except FileNotFoundError: #If config file doesnt exit then create it and close program
     with open('Config.txt', 'w') as file:
             file.write("#EDIT ME\nBotToken=YOURAPIKEY\n#------------\nMonitoredChannel=\n#This is the voice channel the bot will monitor\n\nSendChannel=\n#This is the text channel the bot will send notifications to\n\nBotPrefix=c\n#The prefix used for commands (dont really need to change this one)")
             file.close()
@@ -54,6 +53,17 @@ except FileNotFoundError:
 
 #Functions
 
+def updateConfig(key:str, value): #Updates the local dictionary and saves to config file.
+    with open("Config.txt", 'r+') as file:
+        readFile = file.readlines()
+        print(readFile)
+
+        readFile[settingsLineNumber[key]-1] = f"{key}={value}"
+        settings[key] = value
+        #NEED TO CLEAR TEXT FILE
+        file.writelines(readFile)
+        file.close()
+
 
 MonitoredChannel=1244866756695036006
 SendChannel=1346322873077469224
@@ -61,7 +71,7 @@ SendChannel=1346322873077469224
 @bot.event
 async def on_ready():
     """Event handler for when the bot is ready."""
-    print(Fore.YELLOW + f"[-----------------------]\nRoBot Ready\n[-----------------------]" + Style.RESET_ALL)
+    print(f"[-----------------------]\n{os.path.basename(__file__)[0:-3]} Ready\n[-----------------------]")
     checkVC.start()  # Start the voice channel check loop
 
 @tasks.loop(seconds=5)
@@ -126,7 +136,7 @@ async def sync(ctx):
 async def setmonitorchannel(interaction: discord.Interaction, channel: discord.VoiceChannel):
     """Slash command to change the monitored voice channel."""
     await interaction.response.send_message(f"Now monitoring <#{channel.id}>")
-    setEnvirontmentVar("MonitoredChannel",channel.id)
+    updateConfig("MonitoredChannel",channel.id)
     global skipLoop
     skipLoop = True
 
@@ -134,13 +144,13 @@ async def setmonitorchannel(interaction: discord.Interaction, channel: discord.V
 async def setmonitorchannel(interaction: discord.Interaction, channel: discord.TextChannel):
     """Slash command to change the monitored voice channel."""
     await interaction.response.send_message(f"Now sending notifications to <#{channel.id}>")
-    setEnvirontmentVar("SendChannel",channel.id)
+    updateConfig("SendChannel",channel.id)
     global skipLoop
     skipLoop = True
 
 
 
 # Run the bot
-bot.run("")
+bot.run(settings["BotToken"])
 
 
