@@ -26,20 +26,16 @@ skipLoop = True
 #Settings dictionary
 settings = {}
 
-with open('Config.txt', 'r+') as file:
-    readFile = file.readlines()
-    amountOfLines = len(readFile)
-    if amountOfLines == 0:
-        file.close()
-        with open('Config.txt', 'w') as file:
-            file.write("#EDIT ME\nBotToken=YOURAPIKEY\n#------------\nMonitoredChannel=\n#This is the voice channel the bot will monitor\n\nSendChannel=\n#This is the text channel the bot will send notifications to\n\nBotPrefix='c'\n#The prefix used for commands (dont really need to change this one)")
-            file.close()
-            print("Welcome new user! Please enter your Discord Bot API Key in \'Config.txt\'")
-            sys.exit()
+try:
+
+    with open('Config.txt', 'r') as file:
+        readFile = file.readlines()
+        amountOfLines = len(readFile)
+        print(amountOfLines)
     
     for line in readFile:
         
-        if line[0] == '#':
+        if line[0] == '#' or line[0] == '\n':
             continue
         splitLine = line.split("=")
 
@@ -49,7 +45,12 @@ with open('Config.txt', 'r+') as file:
             splitLine[1] = splitLine[1].strip("\\n")
             settings[splitLine[0]] = (splitLine[1])
 
-#print(settings)
+except FileNotFoundError:
+    with open('Config.txt', 'w') as file:
+            file.write("#EDIT ME\nBotToken=YOURAPIKEY\n#------------\nMonitoredChannel=\n#This is the voice channel the bot will monitor\n\nSendChannel=\n#This is the text channel the bot will send notifications to\n\nBotPrefix=c\n#The prefix used for commands (dont really need to change this one)")
+            file.close()
+            print("Welcome new user! Please enter your Discord Bot API Key in \'Config.txt\'")
+            sys.exit()
 
 #Functions
 
