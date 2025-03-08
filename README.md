@@ -102,5 +102,5 @@ Chimebot tracks a voice channel within a discord server and send announcements t
 
     - ```/setalertedrole```
         This command will set the role that is @'d when someone leaves or joins. This can be disabled or enabled with the command below
-    - ```atagroup```
+    - ```/atagroup```
         This command will determine if a role is @'d when someone leaves or joins. Default is @everyone
