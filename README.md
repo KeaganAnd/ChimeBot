@@ -4,7 +4,7 @@
 
 ---
 ```diff
-- **MUST READ ME BEFORE USE**
+MUST READ ME BEFORE USE
 ```
 
 # End User License Agreement (EULA) for ChimeBot
